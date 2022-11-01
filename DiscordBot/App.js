@@ -10,10 +10,11 @@
 // https://data.mongodb-api.com/app/data-spcyc/endpoint/data/v1
 // APIKEY: BxhVohGJyfJRHgaE5TE1cIU6IWYKI5Ak1OwuGlvBBFOWCpXw3i7Iv3ZimQWv94oI
 
+require('dotenv').config();
 const ClientSecret = "RUPo5exhzC0SOIZBUJ1VwwvTMukaYyJB";
 const PublicKey = "933132665aef48592b79c916d9ff4b31507e749221503b8846fbcb852b01d426";
 const CLIENT_ID = "1035743782357962753";
-const EloBotToken = "MTAzNTc0Mzc4MjM1Nzk2Mjc1Mw.Gf677k.Ytpu4e8o_dXtduVsspnehKD-RafpysI7JBcnnQ";
+const EloBotToken = process.env.SquadEloTracker;
 const GUILD_ID = "1036036794061434980";
 
 const fs = require('node:fs');
