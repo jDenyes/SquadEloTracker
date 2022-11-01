@@ -34,7 +34,7 @@ module.exports = {
                 .setName('top')
                 .setDescription('top player')
                 .setRequired(true)
-        ),
+        )
         // .addStringOption(option =>
         //     option
         //         .setName('jg')
@@ -58,7 +58,8 @@ module.exports = {
         //         .setName('sup')
         //         .setDescription('sup player')
         //         .setRequired(true)
-        // ),
+        // )
+        ,
     async execute(interaction) {
         const teamSide = interaction.options.get('team-side').value;
         const gameID =   parseInt(interaction.options.get('game-id').value);
@@ -68,55 +69,61 @@ module.exports = {
             interaction.reply(`ERROR: Game with ID(${gameID}) does not exist`);
             return;
         }
-
+        
+        // grabs the game instance
         game = interaction.client.Games.get(gameID);
 
-        team = [interaction.options.get('top').value]
-        // team = [interaction.options.get('top').value, interaction.options.get('jg').value, interaction.options.get('mid').value,
-        //     interaction.options.get('adc').value, interaction.options.get('sup').value] ;
-        
-        // game.Teams[teamSide] = team;
+        // holds the Discord IDs of each team
+        let teamID = [interaction.options.get('top').value,
+                // interaction.options.get('jg').value,
+        ]
+        let teamInfo = ['none']; //, 'none', 'none', 'none', 'none'];
 
-        if (teamSide === 'Red') {
-            console.log("adding to red team");
-            game.Teams[appConsts.RED_TEAM] = team;
-        } else {
-            console.log("adding to blue team");
-            game.Teams[appConsts.BLUE_TEAM] = team;
-        }
+        console.log(`Team Discord IDs ${teamID}`);
+        // console.log(`Team Discord IDs ${team[0]}`);
 
-        interaction.client.Games.set(gameID, game);
-        let teamColour = teamSide;
-        
-        teamPlayers = interaction.client.users.cache.get(team[appConsts.TOP]);
-        player = {
-            DiscordID: team[appConsts.TOP],
-            name: teamPlayers.username,
-            Elo: 0,
-            Wins: 0,
-            Losses: 0,
-        };
-
+        // Grabs player from database
+        // if not in the databse add the player to the databse with fresh elo rating
+        let Player;
         (async () => {
-            if (await database.CheckDataBaseForPlayer(player)) {
-                // no nothing
-                console.log("Player already in database");
+            Player = await database.CheckDataBaseForPlayer(teamID[0]);
+            if (Player.length) {
+                console.log(Player)
+                Player = Player[0];
+                console.log('Player found in database');
+                console.log(Player)
             } else {
-                // add the player to the database
-                console.log("adding player to the database");
-                database.AddPlayerToDataBaseCollection(player);
+                console.log('Player NOT found in database');
+                console.log(`Discord ID: ${teamID[0]} `);
+                console.log('username: ', interaction.client.users.cache.get(teamID[0]));
+                Player = {
+                    DiscordID: teamID[0],
+                    name: interaction.client.users.cache.get(teamID[0]).username,
+                    Elo: 1000,
+                    Wins: 0,
+                    Losses: 0,
+                };
+                await database.AddPlayerToDataBaseCollection(Player);
+                Player = await database.CheckDataBaseForPlayer(teamID[0]);
             }
+            teamInfo[0] = Player;
+            console.log(`Team Player Information ${teamInfo}`);
+            // game.Teams[teamSide] = team;
+    
+            if (teamSide === 'Red') {
+                console.log("adding to red team");
+                game.Teams[appConsts.RED_TEAM] = teamInfo;
+            } else {
+                console.log("adding to blue team");
+                game.Teams[appConsts.BLUE_TEAM] = teamInfo;
+            }
+    
+            interaction.client.Games.set(gameID, game);
+            let teamColour = teamSide;
+            
+            teamPlayers = [interaction.client.users.cache.get(teamID[0])];
+            await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${teamPlayers[0]}`); // ${found}`); // + team[0]);
         })();
-
-        // let found;
-        // if (database.CheckDataBaseForPlayer(player)) {
-        //     found = "already in database";
-        // } else {
-        //     found = "must be added to database";
-        // }
-        console.log(teamPlayers);
-        console.log(player.name);
-        await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${teamPlayers}`); // ${found}`); // + team[0]);
     },
     // interaction.client to access the client object in this file
 };

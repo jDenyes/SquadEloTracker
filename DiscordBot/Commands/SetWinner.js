@@ -37,7 +37,7 @@ module.exports = {
         }
 
         winner = interaction.options.get('winning-team').value;
-        let team;
+        // let team;
         let winningID;
         if (winner === "Red") {
             winningID = appConsts.RED_TEAM;
@@ -46,34 +46,30 @@ module.exports = {
         }
 
 
+        // grab list of player objects from each team
+        winningTeam = interaction.client.Games.get(gameID).Teams[winningID];
+        losingTeam = interaction.client.Games.get(gameID).Teams[1 - winningID];
 
-        team = interaction.client.Games.get(gameID).Teams[winningID];
+        // update each players wins, losses and elo
+        player = winningTeam[0];
+        player._Wins += 1;
+        player._Elo += 10;
+        await database.UpdatePlayerInformation(player);
+
+        player = losingTeam[0];
+        player._Losses += 1;
+        player._Elo -= 10;
+        await database.UpdatePlayerInformation(player);
+
         
         teamMembers = [
-            interaction.client.users.cache.get(team[0]),
+            interaction.client.users.cache.get(winningTeam[0]._Discord_ID),
             // interaction.client.users.cache.get(team[1]),
             // interaction.client.users.cache.get(team[2]),
             // interaction.client.users.cache.get(team[3]),
             // interaction.client.users.cache.get(team[4]),
         ]
         await interaction.reply(`${winner} is the winner with members ${teamMembers}`);
-
-        player = {
-            DiscordID: team[0],
-            name: teamMembers[0].username,
-            Elo: 0,
-            Wins: 0,
-            Losses: 0,
-        };
-
-        // for teams in 
-        // database.AddPlayerToDataBaseCollection(player);
-
-        // grab elo of everyone in the game
     },
-    // async IsInDataBase(player) {
-
-    // } 
 };
 
-// interaction.client to access the client object in this file
