@@ -1,9 +1,8 @@
 const {SlashCommandBuilder} = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
-// console.log(path.join(path.join(__dirname, 'Database'), 'database.js'));
-// const database = require(path.join(path.join(__dirname, 'Database'), 'database.js'));
-const database = require("../Database/database.js")
+const database = require("../Database/database.js");
+const appConsts = require('../App.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -37,13 +36,18 @@ module.exports = {
             return;
         }
 
+        winner = interaction.options.get('winning-team').value;
         let team;
-        winner = interaction.options.get('winning-team').value
+        let winningID;
         if (winner === "Red") {
-            team = interaction.client.Games.get(gameID).RedTeam;
+            winningID = appConsts.RED_TEAM;
         } else {
-            team = interaction.client.Games.get(gameID).BlueTeam;
+            winningID = appConsts.BLUE_TEAM;
         }
+
+
+
+        team = interaction.client.Games.get(gameID).Teams[winningID];
         
         teamMembers = [
             interaction.client.users.cache.get(team[0]),
@@ -62,7 +66,8 @@ module.exports = {
             Losses: 0,
         };
 
-        database.AddPlayerToDataBaseCollection(player);
+        // for teams in 
+        // database.AddPlayerToDataBaseCollection(player);
 
         // grab elo of everyone in the game
     },

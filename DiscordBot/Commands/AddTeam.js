@@ -1,5 +1,6 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const appConsts = require('../App.js')
+const database = require("../Database/database.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -85,16 +86,37 @@ module.exports = {
         }
 
         interaction.client.Games.set(gameID, game);
-        // console.log(interaction.client.users.cache.get(team[0]));
-        teamPlayers = interaction.client.users.cache.get(team[0]);
         let teamColour = teamSide;
-        // if (teamSide == appConsts.BLUE_TEAM) {
-        //     teamColour = "BLUE";
-        // } else {
-        //     teamColour = "RED";
-        // }
         
-        await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${teamPlayers} `); // + team[0]);
+        teamPlayers = interaction.client.users.cache.get(team[appConsts.TOP]);
+        player = {
+            DiscordID: team[appConsts.TOP],
+            name: teamPlayers.username,
+            Elo: 0,
+            Wins: 0,
+            Losses: 0,
+        };
+
+        (async () => {
+            if (await database.CheckDataBaseForPlayer(player)) {
+                // no nothing
+                console.log("Player already in database");
+            } else {
+                // add the player to the database
+                console.log("adding player to the database");
+                database.AddPlayerToDataBaseCollection(player);
+            }
+        })();
+
+        // let found;
+        // if (database.CheckDataBaseForPlayer(player)) {
+        //     found = "already in database";
+        // } else {
+        //     found = "must be added to database";
+        // }
+        console.log(teamPlayers);
+        console.log(player.name);
+        await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${teamPlayers}`); // ${found}`); // + team[0]);
     },
     // interaction.client to access the client object in this file
 };

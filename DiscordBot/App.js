@@ -25,11 +25,13 @@ const {SlashCommandBuilder} = require('@discordjs/builders');
 module.exports = {
     BLUE_TEAM: 0,
     RED_TEAM: 1,
+    TEAM_COUNT: 2,
     TOP: 0,
     JG: 1,
     MID: 2,
     ADC: 3,
     SUP: 4,
+    ROLE_COUNT: 5,
 }
 
 const rest = new REST({version: '10'}).setToken(EloBotToken);
