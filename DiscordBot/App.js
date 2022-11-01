@@ -1,15 +1,3 @@
-// Application ID: 1035743782357962753
-// Public Key: 933132665aef48592b79c916d9ff4b31507e749221503b8846fbcb852b01d426
-// Client Secret: RUPo5exhzC0SOIZBUJ1VwwvTMukaYyJB
-// Client ID: 1035743782357962753
-
-// https://discordapp.com/oauth2/authorize?&client_id=CLIENTID&scope=bot&permissions=8
-
-// MONGODB
-// jdizzle : limer
-// https://data.mongodb-api.com/app/data-spcyc/endpoint/data/v1
-// APIKEY: BxhVohGJyfJRHgaE5TE1cIU6IWYKI5Ak1OwuGlvBBFOWCpXw3i7Iv3ZimQWv94oI
-
 require('dotenv').config();
 const ClientSecret = "RUPo5exhzC0SOIZBUJ1VwwvTMukaYyJB";
 const PublicKey = "933132665aef48592b79c916d9ff4b31507e749221503b8846fbcb852b01d426";
