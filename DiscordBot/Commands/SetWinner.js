@@ -70,6 +70,9 @@ module.exports = {
             await database.UpdatePlayerInformation(player);  
         }
 
+        // remove the game from the Map now
+        interaction.client.Games.delete(gameID);
+
         
         // teamMembers = [
         //     interaction.client.users.cache.get(winningTeam[0]._Discord_ID),
