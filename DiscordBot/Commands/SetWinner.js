@@ -35,14 +35,16 @@ module.exports = {
             interaction.reply(`ERROR: Game with ID(${gameID}) does not exist`);
             return;
         }
-
+        console.log("determining the winning team");
         winner = interaction.options.get('winning-team').value;
         // let team;
         let winningID;
         if (winner === "Red") {
+            console.log("Red Team won");
             winningID = appConsts.RED_TEAM;
         } else {
             winningID = appConsts.BLUE_TEAM;
+            console.log("Blue Team won");
         }
 
 
@@ -50,26 +52,33 @@ module.exports = {
         winningTeam = interaction.client.Games.get(gameID).Teams[winningID];
         losingTeam = interaction.client.Games.get(gameID).Teams[1 - winningID];
 
-        // update each players wins, losses and elo
-        player = winningTeam[0];
-        player._Wins += 1;
-        player._Elo += 10;
-        await database.UpdatePlayerInformation(player);
+        teamMembers = [0, 0, 0, 0, 0];
 
-        player = losingTeam[0];
-        player._Losses += 1;
-        player._Elo -= 10;
-        await database.UpdatePlayerInformation(player);
+
+        for (let i = 0; i < 2; i++) {
+            player = winningTeam[i];
+            player._Wins += 1;
+            player._Elo += 10;
+            await database.UpdatePlayerInformation(player);
+            teamMembers[i] = interaction.client.users.cache.get(player._Discord_ID);
+
+            // new Promise(resolve => setTimeout(resolve, 1000));
+    
+            player = losingTeam[i];
+            player._Losses += 1;
+            player._Elo -= 10;
+            await database.UpdatePlayerInformation(player);  
+        }
 
         
-        teamMembers = [
-            interaction.client.users.cache.get(winningTeam[0]._Discord_ID),
-            // interaction.client.users.cache.get(team[1]),
-            // interaction.client.users.cache.get(team[2]),
-            // interaction.client.users.cache.get(team[3]),
-            // interaction.client.users.cache.get(team[4]),
-        ]
-        await interaction.reply(`${winner} is the winner with members ${teamMembers}`);
+        // teamMembers = [
+        //     interaction.client.users.cache.get(winningTeam[0]._Discord_ID),
+        //     // interaction.client.users.cache.get(team[1]),
+        //     // interaction.client.users.cache.get(team[2]),
+        //     // interaction.client.users.cache.get(team[3]),
+        //     // interaction.client.users.cache.get(team[4]),
+        // ]
+        await interaction.reply(`${winner} team is the winner`);// with members ${teamMembers}`);
     },
 };
 

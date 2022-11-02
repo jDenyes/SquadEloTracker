@@ -17,7 +17,7 @@ module.exports = {
     MID: 2,
     ADC: 3,
     SUP: 4,
-    ROLE_COUNT: 5,
+    TEAM_SIZE: 5,
 }
 
 const rest = new REST({version: '10'}).setToken(EloBotToken);

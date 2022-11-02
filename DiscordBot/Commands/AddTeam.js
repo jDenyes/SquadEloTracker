@@ -35,25 +35,25 @@ module.exports = {
                 .setDescription('top player')
                 .setRequired(true)
         )
-        // .addStringOption(option =>
-        //     option
-        //         .setName('jg')
-        //         .setDescription('jg player')
-        //         .setRequired(true)
-        // )
-        // .addStringOption(option =>
+        .addUserOption(option =>
+            option
+                .setName('jg')
+                .setDescription('jg player')
+                .setRequired(true)
+        )
+        // .addUserOption(option =>
         //     option
         //         .setName('mid')
         //         .setDescription('mid player')
         //         .setRequired(true)
         // )
-        // .addStringOption(option =>
+        // .addUserOption(option =>
         //     option
         //         .setName('adc')
         //         .setDescription('adc player')
         //         .setRequired(true)
         // )
-        // .addStringOption(option =>
+        // .addUserOption(option =>
         //     option
         //         .setName('sup')
         //         .setDescription('sup player')
@@ -74,42 +74,51 @@ module.exports = {
         game = interaction.client.Games.get(gameID);
 
         // holds the Discord IDs of each team
-        let teamID = [interaction.options.get('top').value,
-                // interaction.options.get('jg').value,
+        let teamID = [
+            interaction.options.get('top').value,
+            interaction.options.get('jg').value,
+            // interaction.options.get('mid').value,
+            // interaction.options.get('adc').value,
+            // interaction.options.get('sup').value,
         ]
-        let teamInfo = ['none']; //, 'none', 'none', 'none', 'none'];
+        
 
         console.log(`Team Discord IDs ${teamID}`);
         // console.log(`Team Discord IDs ${team[0]}`);
 
         // Grabs player from database
         // if not in the databse add the player to the databse with fresh elo rating
-        let Player;
         (async () => {
-            Player = await database.CheckDataBaseForPlayer(teamID[0]);
-            if (Player.length) {
-                console.log(Player)
-                Player = Player[0];
-                console.log('Player found in database');
-                console.log(Player)
-            } else {
-                console.log('Player NOT found in database');
-                console.log(`Discord ID: ${teamID[0]} `);
-                console.log('username: ', interaction.client.users.cache.get(teamID[0]));
-                Player = {
-                    DiscordID: teamID[0],
-                    name: interaction.client.users.cache.get(teamID[0]).username,
-                    Elo: 1000,
-                    Wins: 0,
-                    Losses: 0,
-                };
-                await database.AddPlayerToDataBaseCollection(Player);
-                Player = await database.CheckDataBaseForPlayer(teamID[0]);
+            let teamInfo = ['none', 'none']; //, 'none', 'none', 'none'];
+            let TeamPlayers = ['none', 'none'];
+            for (let i = 0; i < 2; i++) {
+                let Player;
+                Player = await database.CheckDataBaseForPlayer(teamID[i]);
+                if (Player.length) {
+                    console.log(Player)
+                    Player = Player[0];
+                    console.log('Player found in database');
+                    console.log(Player)
+                } else {
+                    console.log('Player NOT found in database');
+                    console.log(`Discord ID: ${teamID[i]} `);
+                    console.log('username: ', interaction.client.users.cache.get(teamID[i]));
+                    Player = {
+                        DiscordID: teamID[i],
+                        name: interaction.client.users.cache.get(teamID[i]).username,
+                        Elo: 1000,
+                        Wins: 0,
+                        Losses: 0,
+                    };
+                    await database.AddPlayerToDataBaseCollection(Player);
+                    Player = await database.CheckDataBaseForPlayer(teamID[i]);
+                }
+                teamInfo[i] = Player;
+                TeamPlayers[i] = interaction.client.users.cache.get(teamID[i]);
             }
-            teamInfo[0] = Player;
             console.log(`Team Player Information ${teamInfo}`);
             // game.Teams[teamSide] = team;
-    
+        
             if (teamSide === 'Red') {
                 console.log("adding to red team");
                 game.Teams[appConsts.RED_TEAM] = teamInfo;
@@ -117,13 +126,14 @@ module.exports = {
                 console.log("adding to blue team");
                 game.Teams[appConsts.BLUE_TEAM] = teamInfo;
             }
-    
+        
             interaction.client.Games.set(gameID, game);
             let teamColour = teamSide;
-            
-            teamPlayers = [interaction.client.users.cache.get(teamID[0])];
-            await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${teamPlayers[0]}`); // ${found}`); // + team[0]);
+                
+            // TeamPlayers[i] = [interaction.client.users.cache.get(teamID[i])];
+            await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${TeamPlayers}`); // ${found}`); // + team[0]);
         })();
+
     },
     // interaction.client to access the client object in this file
 };
