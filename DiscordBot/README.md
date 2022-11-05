@@ -17,7 +17,7 @@ open Items {
         - Swap Player (for changing players on a team)
         - Remove Player
         - Remove Team
-        - DropGame
+        <!-- - DropGame (done) -->
 
     - Add Game history to the Database
         - each game with its teammembers, gameID, date

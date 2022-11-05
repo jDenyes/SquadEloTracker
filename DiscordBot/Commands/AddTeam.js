@@ -6,10 +6,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('addteam')
         .setDescription('Adds a Team to the game!')
-        // .addChannelOption(option => 
-        //     option.setName('channel')
-        //     .setDescription("chanel")
-        // )
         .addStringOption(option =>
             option
                 .setName('team-side')
@@ -117,7 +113,6 @@ module.exports = {
                 TeamPlayers[i] = interaction.client.users.cache.get(teamID[i]);
             }
             console.log(`Team Player Information ${teamInfo}`);
-            // game.Teams[teamSide] = team;
         
             if (teamSide === 'Red') {
                 console.log("adding to red team");
@@ -129,11 +124,8 @@ module.exports = {
         
             interaction.client.Games.set(gameID, game);
             let teamColour = teamSide;
-                
-            // TeamPlayers[i] = [interaction.client.users.cache.get(teamID[i])];
+            
             await interaction.reply(`${gameID}: Adding ${teamColour} Team: ${TeamPlayers}`); // ${found}`); // + team[0]);
         })();
-
     },
-    // interaction.client to access the client object in this file
 };
