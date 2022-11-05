@@ -2,8 +2,8 @@
 
 open Items {
     - Add GetElo Command
-        - Return back a users Elo when requested
-        - Return back a leaderboard of Player Elo (done)
+        <!-- - Return back a users Elo when requested (done) -->
+        <!-- - Return back a leaderboard of Player Elo (done) -->
             - add win% and games played
 
     - Add Real Elo Calculations
@@ -25,11 +25,13 @@ open Items {
     - Don't let someone be on both teams, or two games at once
 
     - Admin Commands
-        - to edit the 
+        - only certain roles can access these commands
+        - to edit the elo of any players
+        - reset the elo
         
     - ONLY Certain roles get access to the addgame elo commands
 
-    - handle error of case of not a real use 
+    - handle error of case of not a real user
 
     - help command
 
@@ -37,5 +39,5 @@ open Items {
 
     - resetElo
 
-    - updateChannel, with updated MMR when a game has ended 
+    - updateChannel, with updated MMR when a game has ended m 
 }

@@ -6,7 +6,7 @@ const appConsts = require('../App.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('set-winner')
+        .setName('setwinner')
         .setDescription('sets the winner of the game to calculate elo gains')
         .addStringOption(option => 
             option

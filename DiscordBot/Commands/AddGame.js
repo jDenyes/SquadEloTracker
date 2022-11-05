@@ -15,7 +15,7 @@ module.exports = {
             Game.gameId = Math.floor(Math.random() * 10000);
         }
         interaction.client.Games.set(Game.gameId, Game);
-        await interaction.reply(`Game has been added with ID ${Game.gameId}`);
+        await interaction.reply(`${Game.gameId}: Game has been added`);
     },
 };
 
