@@ -76,6 +76,22 @@ module.exports = {
             mongoClient.close();
         }
     },
+    GrabAllPlayerInformation: async function () {
+        let mongoClient;
+        try {
+            mongoClient = await module.exports.connectToCluster(DB_URI);
+            const db = mongoClient.db("SquadElo");
+            const collection = db.collection("PlayerInfo");
+
+            AllPlayers = await collection.find().toArray();
+            return AllPlayers;
+        } catch(err) {
+            console.error(err);
+            return err;
+        } finally {
+            mongoClient.close();
+        }
+    },
     UpdatePlayerInformation: async function (player) {
         let mongoClient;
         try {
@@ -100,4 +116,9 @@ module.exports = {
             mongoClient.close();
         }
     },
-}
+};
+
+// (async () => {
+//     data = await module.exports.GrabAllPlayerInformation();
+//     console.log(data);
+// })();

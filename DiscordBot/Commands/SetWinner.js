@@ -81,7 +81,7 @@ module.exports = {
         //     // interaction.client.users.cache.get(team[3]),
         //     // interaction.client.users.cache.get(team[4]),
         // ]
-        await interaction.reply(`${winner} team is the winner`);// with members ${teamMembers}`);
+        await interaction.reply(`${gameID}: ${winner} team is the winner of Game`);// with members ${teamMembers}`);
     },
 };
 

@@ -131,7 +131,7 @@ module.exports = {
             let teamColour = teamSide;
                 
             // TeamPlayers[i] = [interaction.client.users.cache.get(teamID[i])];
-            await interaction.reply(`Adding ${teamColour} Team to game ${gameID}: ${TeamPlayers}`); // ${found}`); // + team[0]);
+            await interaction.reply(`${gameID}: Adding ${teamColour} Team: ${TeamPlayers}`); // ${found}`); // + team[0]);
         })();
 
     },
